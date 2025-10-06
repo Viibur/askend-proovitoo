@@ -6,19 +6,15 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter
-@Setter
+@Data
 @Entity
 @Table(name = "criteria")
 public class Criteria {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    Long id;
-    String type;
-    String condition;
-    String criteriaValue;
-
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Filter filter;
+    private Long id;
+    private Long filterId;
+    private String type;
+    private String condition;
+    private String criteriaValue;
 }

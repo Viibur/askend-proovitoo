@@ -10,7 +10,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CriteriaDTO {
-    private int id;
+    private Long id;
+    private Long filterId;
     private String type;
     private String condition;
     private String criteriaValue;

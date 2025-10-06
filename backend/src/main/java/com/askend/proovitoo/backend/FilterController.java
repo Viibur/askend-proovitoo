@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -18,11 +20,6 @@ import java.util.List;
 public class FilterController {
 
     private final FilterService filterService;
-
-    @GetMapping(value = "/filters", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<FilterDTO>> getFilters() {
-        return new ResponseEntity<>(filterService.getFilters(), HttpStatus.OK);
-    }
 
     @GetMapping(value = "/filter_names", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<FilterNameDTO>> getFilterNames() {
@@ -33,4 +30,11 @@ public class FilterController {
     public ResponseEntity<FilterDTO> getFilterById(@PathVariable Long id) {
         return new ResponseEntity<>(filterService.getfilterById(id), HttpStatus.OK);
     }
+
+    @PostMapping(value = "/add_filter", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<HttpStatus> addFilter(@RequestBody FilterDTO filterDTO) {
+        filterService.addFilter(filterDTO);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 }

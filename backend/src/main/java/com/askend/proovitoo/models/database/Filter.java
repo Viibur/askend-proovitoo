@@ -2,6 +2,10 @@ package com.askend.proovitoo.models.database;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 import java.util.List;
 
@@ -11,10 +15,7 @@ import java.util.List;
 public class Filter {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    Long id;
-    String name;
-    int option;
-
-    @OneToMany(mappedBy = "filter", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Criteria> criteriaList;
+    private Long id;
+    private String name;
+    private int option;
 }

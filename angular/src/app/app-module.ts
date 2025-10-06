@@ -6,6 +6,7 @@ import {App} from './app';
 import {FilterView} from './filter-view/filter-view';
 import {FrontPage} from './front-page/front-page';
 import {provideHttpClient, withInterceptorsFromDi} from '@angular/common/http';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,9 @@ import {provideHttpClient, withInterceptorsFromDi} from '@angular/common/http';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    ReactiveFormsModule,
+    FormsModule,
   ],
   providers: [
     provideBrowserGlobalErrorListeners(),

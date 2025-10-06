@@ -1,1 +1,29 @@
-<p>filter-view works! but it doesnt tho :(</p>
+<div>
+  <div class="filter-header">
+    <label>Filter name</label>
+    <input [placeholder]="'Filter name'" type="text" [(ngModel)]="filter.name"/>
+  </div>
+
+  <!-- Criteria Rows -->
+  <div>
+    @for (filterCriteria of filter.criteria; track filterCriteria.id) {
+      <div>
+        {{ filterCriteria.type }}
+      </div>
+    }
+  </div>
+  <button type="button" (click)="addCriteria()">+ Add Row</button>
+
+  <div class="selection-group">
+    @for (selection of [1, 2, 3]; track selection) {
+      <label [for]="selection"><input id="{{selection}}" [value]='selection' type="radio" name="selections" [(ngModel)]="filter.option">
+        Select {{ selection }}
+      </label>
+    }
+  </div>
+
+  <div class="action-buttons">
+    <button type="button" (click)="onClose()">Close</button>
+    <button type="button" (click)="onSubmit()">Save</button>
+  </div>
+</div>

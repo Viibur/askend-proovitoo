@@ -8,7 +8,7 @@ const routes: Routes = [
     path: '',
     component: FrontPage,
   }, {
-    path: 'filter/:id',
+    path: 'filter',
     component: FilterView,
   }
 ];

@@ -16,9 +16,14 @@ export class FrontPage implements OnInit {
   }
 
   ngOnInit(): void {
-    this.filterService.getFilterNames().subscribe((filters: FilterNameDTO[]) => {
-      this.filters = filters;
-      this.changeDetectorRef.detectChanges();
-    });
+    if (this.filterService.filterIdNameList$.value.length === 0) {
+      this.filterService.getFilterNames().subscribe((filters: FilterNameDTO[]) => {
+        this.filters = filters;
+        this.filterService.filterIdNameList$.next(filters);
+        this.changeDetectorRef.detectChanges();
+      });
+    } else {
+      this.filters = this.filterService.filterIdNameList$.value;
+    }
   }
 }

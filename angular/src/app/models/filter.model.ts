@@ -1,9 +1,9 @@
 import {CriteriaDTO} from './criteria.model';
 
 export interface FilterDTO {
-  id: number;
+  id: number | null;
   name: string;
-  option: number;
+  option: number | null;
   criteria: CriteriaDTO[];
 }
 

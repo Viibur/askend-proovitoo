@@ -23,7 +23,12 @@ export class FilterService {
     return this.http.get<FilterDTO>('http://localhost:8080/filter/' + id);
   }
 
+  private readonly _filterIdNameList$: BehaviorSubject<FilterNameDTO[]> = new BehaviorSubject<FilterNameDTO[]>([]);
   private readonly _filterId$: BehaviorSubject<number | null> = new BehaviorSubject<number | null>(null);
+
+  get filterIdNameList$(): BehaviorSubject<FilterNameDTO[]> {
+    return this._filterIdNameList$;
+  }
 
   get filterId$(): BehaviorSubject<number | null> {
     return this._filterId$;
