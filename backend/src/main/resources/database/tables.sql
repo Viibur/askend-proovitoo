@@ -1,7 +1,7 @@
 DROP TABLE IF EXISTS filter;
 CREATE TABLE filter
 (
-    ID     INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+    ID     INT PRIMARY KEY AUTO_INCREMENT,
     NAME   VARCHAR(255) NOT NULL,
     OPTION INT          NOT NULL
 );
@@ -9,7 +9,7 @@ CREATE TABLE filter
 DROP TABLE IF EXISTS criteria;
 CREATE TABLE criteria
 (
-    id             INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+    id             INT PRIMARY KEY AUTO_INCREMENT,
     filter_id      INT          NOT NULL,
     type           VARCHAR(255) NOT NULL,
     condition      VARCHAR(255) NOT NULL,

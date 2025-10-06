@@ -1,5 +1,5 @@
 export interface CriteriaDTO {
-  id: number;
+  id: number | null;
   type: string;
   condition: string;
   criteriaValue: string;

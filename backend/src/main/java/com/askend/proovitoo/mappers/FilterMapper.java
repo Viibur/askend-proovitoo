@@ -11,10 +11,15 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface FilterMapper {
-    List<FilterDTO> toDTOs(List<Filter> filters);
+    List<CriteriaDTO> toCriteriaDTOs(List<Criteria> criteria);
 
-    @Mapping(target = "criteria", source = "criteriaList")
     FilterDTO toDTO(Filter filter);
 
     CriteriaDTO toDTO(Criteria criteria);
+
+    Filter toEntity(FilterDTO filterDTO);
+
+    List<Criteria> toEntity(List<CriteriaDTO> criteria);
+
+    Criteria toEntity(CriteriaDTO criteriaDTO);
 }

@@ -1,6 +1,6 @@
 <div>
   @for (filter of filters; track filter.id) {
-    <li><a [routerLink]="'/filter/'+filter.id">{{ filter.name }}</a></li>
+    <li><a [routerLink]="'/filter/'">{{ filter.name }}</a></li>
   } @empty {
     <li>There are no items.</li>
   }
