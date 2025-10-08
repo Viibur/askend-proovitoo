@@ -3,4 +3,5 @@ export interface CriteriaDTO {
   type: string;
   condition: string;
   criteriaValue: string;
+  addedOrder: number;
 }

@@ -1,7 +1,17 @@
 <div>
+  <div class="header">
+    <h5 class="fw-bold p-3 ms-2 text-white">
+      Filter list
+    </h5>
+  </div>
   @for (filter of filters; track filter.id) {
-    <li><a [routerLink]="'/filter/'">{{ filter.name }}</a></li>
+    <li>
+      <h2 class="clickable ps-3" (click)="onFilterClick(filter.id)" [routerLink]="'/filter/'">{{ filter.name }}</h2>
+    </li>
   } @empty {
-    <li>There are no items.</li>
   }
+  <div class="row p-2 justify-content-center mt-5">
+    <button class="col-2 btn btn-add btn-secondary text-white"
+            (click)="onAddFilterClick()">+ Add Filter</button>
+  </div>
 </div>
