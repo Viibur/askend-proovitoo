@@ -1,11 +1,12 @@
-package com.askend.proovitoo.backend;
+package com.askend.proovitoo.services;
 
 import com.askend.proovitoo.mappers.FilterMapper;
 import com.askend.proovitoo.models.database.Criteria;
 import com.askend.proovitoo.models.database.Filter;
-import com.askend.proovitoo.models.dto.CriteriaDTO;
 import com.askend.proovitoo.models.dto.FilterDTO;
 import com.askend.proovitoo.models.dto.FilterNameDTO;
+import com.askend.proovitoo.repository.CriteriaRepository;
+import com.askend.proovitoo.repository.FilterRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;

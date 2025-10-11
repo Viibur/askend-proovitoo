@@ -1,8 +1,8 @@
-package com.askend.proovitoo.backend;
+package com.askend.proovitoo.controllers;
 
-import com.askend.proovitoo.models.database.Filter;
 import com.askend.proovitoo.models.dto.FilterDTO;
 import com.askend.proovitoo.models.dto.FilterNameDTO;
+import com.askend.proovitoo.services.FilterService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

@@ -3,7 +3,7 @@ import {CriteriaDTO} from './criteria.model';
 export interface FilterDTO {
   id: number | null;
   name: string;
-  option: number | null;
+  option: number;
   criteria: CriteriaDTO[];
 }
 

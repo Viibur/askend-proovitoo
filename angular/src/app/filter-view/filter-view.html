@@ -12,22 +12,25 @@
 
   <div class="p-3">
     <div class="filter-header row">
-      <label class="w-auto">Filter name</label>
+      <h5 class="w-auto fw-bold">Filter name</h5>
       <input class="w-25"
-             [placeholder]="'Filter name'"
              type="text"
+             [style]="filter.name ? '' : 'border-color: red;'"
+             [placeholder]="'Filter name'"
              [(ngModel)]="filter.name"/>
     </div>
 
     <!-- Criteria Rows -->
     <div class="pt-3">
-      <div class="row overflow-y-scroll" style="max-height: 100vh;">
-        <label class="w-auto">Criteria</label>
+      <div class="row overflow-y-scroll" style="max-height: 50vh;">
+        <h5 class="w-auto fw-bold">Criteria</h5>
         <div class="col">
-          @for (filterCriteria of filter.criteria; track filterCriteria.addedOrder) {
+          @for (filterCriteria of filter.criteria; track filterCriteria.addedOrder ? filterCriteria.addedOrder : filterCriteria.id) {
             <div class="row pb-4">
               <ng-select dropdownPosition="bottom"
-                         class="col w-25"
+                         class="col-3"
+                         appendTo="body"
+                         (change)="changeCondition(filterCriteria)"
                          [clearable]="false"
                          [multiple]="false"
                          [items]=" criteriaTypes"
@@ -35,19 +38,31 @@
                          [(ngModel)]="filterCriteria.type"/>
 
               <ng-select dropdownPosition="bottom"
-                         class="col w-25"
+                         class="col-3"
+                         appendTo="body"
                          [clearable]="false"
                          [multiple]="false"
                          [items]="conditions[filterCriteria.type]"
                          [searchable]="false"
                          [(ngModel)]="filterCriteria.condition"/>
 
-              <div class="col">
+              <div class="col-3">
                 @if (filterCriteria.type === Type.AMOUNT) {
-                  <input type="number" [(ngModel)]="filterCriteria.criteriaValue">
+                  <input class="w-100"
+                         type="number"
+                         [style]="filterCriteria.criteriaValue ? '' : 'border-color: red;'"
+                         [(ngModel)]="filterCriteria.criteriaValue">
                 } @else if (filterCriteria.type === Type.TITLE) {
-                  <input type="text " [(ngModel)]="filterCriteria.criteriaValue">
+                  <input class="w-100"
+                         type="text"
+                         [style]="filterCriteria.criteriaValue ? '' : 'border-color: red;'"
+                         [(ngModel)]="filterCriteria.criteriaValue">
                 } @else {
+                  <input [(ngModel)]="filterCriteria.criteriaValue"
+                         [value]="filterCriteria.criteriaValue"
+                         [style]="filterCriteria.criteriaValue ? '' : 'border-color: red;'"
+                         class="w-100"
+                         type="date"/>
                 }
               </div>
             </div>
@@ -60,15 +75,14 @@
     </div>
 
     <div class="row">
-      <label class="w-auto">Selection</label>
+      <h5 class="w-auto fw-bold mt-1">Selection</h5>
       @for (selection of [1, 2, 3]; track selection) {
-        <span class="w-auto">
-      <input id="{{selection}}"
-             [(ngModel)]="filter.option"
-             [value]='selection'
-             type="radio"
-             name="selections">
-      Select {{ selection }}
+        <span class="w-auto d-flex align-items-center">
+          <input [(ngModel)]="filter.option"
+                 [value]='selection'
+                 class="me-2"
+                 type="radio">
+          Select {{ selection }}
       </span>
       }
     </div>
@@ -76,6 +90,8 @@
   </div>
   <div class="footer d-flex justify-content-center">
     <button class="btn btn-dark me-3 mt-2 mb-2" [routerLink]="'/'">Close</button>
-    <button class="btn btn-info ms-3 mt-2 mb-2" (click)="onSubmit()">Save</button>
+    <button class="btn btn-info ms-3 mt-2 mb-2"
+            (click)="onSubmit()"
+            [disabled]="!isFilterValid()">Save</button>
   </div>
 </div>

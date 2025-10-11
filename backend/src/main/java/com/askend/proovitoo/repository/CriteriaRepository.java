@@ -1,4 +1,4 @@
-package com.askend.proovitoo.backend;
+package com.askend.proovitoo.repository;
 
 import com.askend.proovitoo.models.database.Criteria;
 import org.springframework.data.jpa.repository.JpaRepository;

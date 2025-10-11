@@ -5,7 +5,6 @@ import com.askend.proovitoo.models.database.Filter;
 import com.askend.proovitoo.models.dto.CriteriaDTO;
 import com.askend.proovitoo.models.dto.FilterDTO;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 
 import java.util.List;
 

@@ -1,10 +1,11 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { FilterService } from '../services/filter.service';
-import { FilterDTO } from '../models/filter.model';
-import { Router, RouterLink } from '@angular/router';
-import { AmountCondition, DateCondition, TitleCondition, Type } from '../models/criteria.enum';
-import { NgLabelTemplateDirective, NgOptionTemplateDirective, NgSelectComponent } from '@ng-select/ng-select';
-import { FormsModule } from '@angular/forms';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {FilterService} from '../services/filter.service';
+import {FilterDTO} from '../models/filter.model';
+import {Router, RouterLink} from '@angular/router';
+import {AmountCondition, DateCondition, TitleCondition, Type} from '../models/criteria.enum';
+import {NgSelectComponent} from '@ng-select/ng-select';
+import {FormsModule} from '@angular/forms';
+import {CriteriaDTO} from '../models/criteria.model';
 
 @Component({
   selector: 'app-filter-view',
@@ -18,33 +19,44 @@ import { FormsModule } from '@angular/forms';
   ],
 })
 export class FilterView implements OnInit {
+  protected readonly Type = Type;
   filter: FilterDTO = {
     id: null,
     name: '',
     criteria: [],
-    option: null,
+    option: 1,
   };
+
   criteriaTypes: string[] = [Type.AMOUNT, Type.TITLE, Type.DATE];
-  conditions = {
+  conditions: {[key: string] : AmountCondition[] | TitleCondition[] | DateCondition[]} = {
     [Type.AMOUNT.valueOf()]: [AmountCondition.MORE, AmountCondition.LESS, AmountCondition.EQUALS],
     [Type.TITLE.valueOf()]: [TitleCondition.STARTS_WITH, TitleCondition.ENDS_WITH, TitleCondition.CONTAINS],
     [Type.DATE.valueOf()]: [DateCondition.FROM, DateCondition.TO, DateCondition.EQUALS],
   }
 
   constructor(private readonly router: Router,
-      private readonly filterService: FilterService,
-      private readonly changeDetectorRef: ChangeDetectorRef) {
+              private readonly filterService: FilterService,
+              private readonly changeDetectorRef: ChangeDetectorRef) {
   }
 
   ngOnInit(): void {
     if (this.filterService.filterId$.value) {
       this.filterService.getFilterById(this.filterService.filterId$.value).subscribe((filter: FilterDTO) => {
         this.filter = filter;
+        this.changeDetectorRef.detectChanges()
       });
+    } else {
+      this.addCriteria();
     }
   }
 
   onSubmit(): void {
+    if (!this.isFilterValid()) return;
+    this.filterService.saveFilter(this.filter).subscribe({
+      next: () => {
+        this.router.navigate(['/']);
+      },
+    });
   }
 
   addCriteria(): void {
@@ -55,7 +67,26 @@ export class FilterView implements OnInit {
       criteriaValue: '',
       addedOrder: this.filter.criteria.length + 1,
     });
-    console.log(this.filter.criteria)
   }
-  protected readonly Type = Type;
+
+  changeCondition(filterCriteria: CriteriaDTO): void {
+    filterCriteria.condition = this.conditions[filterCriteria.type][0];
+    filterCriteria.criteriaValue = ''
+  }
+
+  isFilterValid(): boolean {
+    if (this.filter.name && this.filter.option && this.areCriteriaValid()) {
+      return true;
+    }
+    return false;
+  }
+
+  areCriteriaValid(): boolean {
+    for (const criteria of this.filter.criteria) {
+      if (!criteria.criteriaValue) {
+        return false;
+      }
+    }
+    return true;
+  }
 }

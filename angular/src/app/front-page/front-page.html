@@ -1,17 +1,23 @@
-<div>
+<div class="overflow-x-hidden">
   <div class="header">
     <h5 class="fw-bold p-3 ms-2 text-white">
       Filter list
     </h5>
   </div>
-  @for (filter of filters; track filter.id) {
-    <li>
-      <h2 class="clickable ps-3" (click)="onFilterClick(filter.id)" [routerLink]="'/filter/'">{{ filter.name }}</h2>
-    </li>
-  } @empty {
-  }
+  <div class="overflow-y-scroll" style="max-height: 60vh">
+    @for (filter of filters; track filter.id) {
+      <li tabindex="0"
+          (keydown)="onFilterKeyDown($event, filter.id)">
+        <h2 class="clickable ps-3"
+            (click)="onFilterClick(filter.id)">
+          {{ filter.name }}</h2>
+      </li>
+    }
+  </div>
   <div class="row p-2 justify-content-center mt-5">
     <button class="col-2 btn btn-add btn-secondary text-white"
-            (click)="onAddFilterClick()">+ Add Filter</button>
+            (click)="addFilterClicked()"
+            [routerLink]="'/filter/'">+ Add Filter
+    </button>
   </div>
 </div>

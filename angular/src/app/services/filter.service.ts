@@ -11,16 +11,16 @@ export class FilterService {
   constructor(private http: HttpClient) {
   }
 
-  getFilters(): Observable<FilterDTO[]> {
-    return this.http.get<FilterDTO[]>('http://localhost:8080/filters');
-  }
-
   getFilterNames(): Observable<FilterNameDTO[]> {
     return this.http.get<FilterNameDTO[]>('http://localhost:8080/filter_names');
   }
 
   getFilterById(id: number): Observable<FilterDTO> {
     return this.http.get<FilterDTO>('http://localhost:8080/filter/' + id);
+  }
+
+  saveFilter(filter: FilterDTO): Observable<void> {
+    return this.http.post<void>('http://localhost:8080/add_filter', filter)
   }
 
   private readonly _filterIdNameList$: BehaviorSubject<FilterNameDTO[]> = new BehaviorSubject<FilterNameDTO[]>([]);
@@ -33,4 +33,5 @@ export class FilterService {
   get filterId$(): BehaviorSubject<number | null> {
     return this._filterId$;
   }
+
 }

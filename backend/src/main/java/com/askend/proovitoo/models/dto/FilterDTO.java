@@ -1,9 +1,6 @@
 package com.askend.proovitoo.models.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
@@ -13,6 +10,7 @@ import java.util.List;
 @AllArgsConstructor
 public class FilterDTO {
     private Long id;
+    @NonNull
     private String name;
     private int option;
     private List<CriteriaDTO> criteria;
