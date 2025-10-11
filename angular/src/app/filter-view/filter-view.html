@@ -1,29 +1,81 @@
-<div>
-  <div class="filter-header">
-    <label>Filter name</label>
-    <input [placeholder]="'Filter name'" type="text" [(ngModel)]="filter.name"/>
+<div class="overflow-hidden">
+  <div class="row mb-4 header">
+    <div class="col p-0">
+      <h5 class="fw-bold p-2 ms-3 text-white">
+        Filter
+      </h5>
+    </div>
+    <div class="col d-flex justify-content-end align-items-center p-2">
+      <button class="btn btn-close btn-close-white" [routerLink]="'/'"></button>
+    </div>
   </div>
 
-  <!-- Criteria Rows -->
-  <div>
-    @for (filterCriteria of filter.criteria; track filterCriteria.id) {
-      <div>
-        {{ filterCriteria.type }}
+  <div class="p-3">
+    <div class="filter-header row">
+      <label class="w-auto">Filter name</label>
+      <input class="w-25"
+             [placeholder]="'Filter name'"
+             type="text"
+             [(ngModel)]="filter.name"/>
+    </div>
+
+    <!-- Criteria Rows -->
+    <div class="pt-3">
+      <div class="row overflow-y-scroll" style="max-height: 100vh;">
+        <label class="w-auto">Criteria</label>
+        <div class="col">
+          @for (filterCriteria of filter.criteria; track filterCriteria.addedOrder) {
+            <div class="row pb-4">
+              <ng-select dropdownPosition="bottom"
+                         class="col w-25"
+                         [clearable]="false"
+                         [multiple]="false"
+                         [items]=" criteriaTypes"
+                         [searchable]="false"
+                         [(ngModel)]="filterCriteria.type"/>
+
+              <ng-select dropdownPosition="bottom"
+                         class="col w-25"
+                         [clearable]="false"
+                         [multiple]="false"
+                         [items]="conditions[filterCriteria.type]"
+                         [searchable]="false"
+                         [(ngModel)]="filterCriteria.condition"/>
+
+              <div class="col">
+                @if (filterCriteria.type === Type.AMOUNT) {
+                  <input type="number" [(ngModel)]="filterCriteria.criteriaValue">
+                } @else if (filterCriteria.type === Type.TITLE) {
+                  <input type="text " [(ngModel)]="filterCriteria.criteriaValue">
+                } @else {
+                }
+              </div>
+            </div>
+          }
+        </div>
       </div>
-    }
-  </div>
-  <button type="button" (click)="addCriteria()">+ Add Row</button>
+    </div>
+    <div class="row p-2 justify-content-center">
+      <button class="btn btn-add bg-dark text-white" (click)="addCriteria()">+ Add Row</button>
+    </div>
 
-  <div class="selection-group">
-    @for (selection of [1, 2, 3]; track selection) {
-      <label [for]="selection"><input id="{{selection}}" [value]='selection' type="radio" name="selections" [(ngModel)]="filter.option">
-        Select {{ selection }}
-      </label>
-    }
-  </div>
+    <div class="row">
+      <label class="w-auto">Selection</label>
+      @for (selection of [1, 2, 3]; track selection) {
+        <span class="w-auto">
+      <input id="{{selection}}"
+             [(ngModel)]="filter.option"
+             [value]='selection'
+             type="radio"
+             name="selections">
+      Select {{ selection }}
+      </span>
+      }
+    </div>
 
-  <div class="action-buttons">
-    <button type="button" (click)="onClose()">Close</button>
-    <button type="button" (click)="onSubmit()">Save</button>
+  </div>
+  <div class="footer d-flex justify-content-center">
+    <button class="btn btn-dark me-3 mt-2 mb-2" [routerLink]="'/'">Close</button>
+    <button class="btn btn-info ms-3 mt-2 mb-2" (click)="onSubmit()">Save</button>
   </div>
 </div>

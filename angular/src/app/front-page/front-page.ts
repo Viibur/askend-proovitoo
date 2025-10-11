@@ -26,4 +26,8 @@ export class FrontPage implements OnInit {
       this.filters = this.filterService.filterIdNameList$.value;
     }
   }
+
+  onFilterClick(id: number): void {
+    this.filterService.filterId$.next(id)
+  }
 }

@@ -1,1 +1,22 @@
 /* You can add global styles to this file, and also import other style files */
+.clickable {
+    text-decoration: none;
+    &:hover {
+        opacity: 0.7;
+        cursor: pointer;
+        text-decoration: underline;
+    }
+}
+
+.header {
+    background-color: #5EBFCC;
+    margin-bottom: 1.5rem;
+}
+
+.footer {
+    background-color: lightgrey;
+    position: fixed;
+    bottom: 0;
+    height: 10vh;
+    width: 100%;
+}
