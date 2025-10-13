@@ -2,6 +2,8 @@ import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {FilterService} from '../services/filter.service';
 import {FilterNameDTO} from '../models/filter.model';
 import {Router} from '@angular/router';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {FilterView} from '../filter-view/filter-view';
 
 @Component({
   selector: 'app-front-page',
@@ -14,6 +16,7 @@ export class FrontPage implements OnInit {
   isModalView: boolean = false;
 
   constructor(private readonly router: Router,
+              private readonly ngbModal: NgbModal,
               private readonly filterService: FilterService,
               private readonly changeDetectorRef: ChangeDetectorRef) {
   }
@@ -25,10 +28,6 @@ export class FrontPage implements OnInit {
       this.changeDetectorRef.detectChanges();
     });
     this.filterService.isModalView$.subscribe(isModalView => {
-      console.log(isModalView)
-      if (!this.isModalView) {
-        document.querySelector("dialog")?.close();
-      }
       this.isModalView = isModalView;
     });
   }
@@ -37,8 +36,9 @@ export class FrontPage implements OnInit {
     if (id) {
       this.filterService.filterId$.next(id);
     }
+    this.filterService.isModalView$.next(this.isModalView);
     if (this.isModalView) {
-      document.querySelector("dialog")?.show()
+      this.ngbModal.open(FilterView, { size: 'xl' })
     } else {
       this.router.navigate(['/filter']);
     }

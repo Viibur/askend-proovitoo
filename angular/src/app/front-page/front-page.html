@@ -4,7 +4,7 @@
       Filter list
     </h4>
     <div class="fw-bold p-1 ms-2 end-0">
-      <input type="radio" (click)="isModalView = !isModalView"/>
+      <input type="checkbox" [(ngModel)]="isModalView"/>
       <span> Modal view</span>
     </div>
   </div>
@@ -24,7 +24,3 @@
     </button>
   </div>
 </div>
-
-<dialog id="dialog">
- <app-filter-view></app-filter-view>
-</dialog>

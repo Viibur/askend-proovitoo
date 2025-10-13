@@ -6,6 +6,7 @@ import {AmountCondition, DateCondition, TitleCondition, Type} from '../models/cr
 import {NgSelectComponent} from '@ng-select/ng-select';
 import {FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {CriteriaDTO} from '../models/criteria.model';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-filter-view',
@@ -27,8 +28,10 @@ export class FilterView implements OnInit {
     [Type.TITLE.valueOf()]: [TitleCondition.STARTS_WITH, TitleCondition.ENDS_WITH, TitleCondition.CONTAINS],
     [Type.DATE.valueOf()]: [DateCondition.FROM, DateCondition.TO, DateCondition.EQUALS],
   };
+  isModalView: boolean = true;
 
   constructor(private readonly router: Router,
+              private readonly ngbModal: NgbModal,
               private readonly formBuilder: FormBuilder,
               private readonly filterService: FilterService,
               private readonly changeDetectorRef: ChangeDetectorRef) {
@@ -63,6 +66,7 @@ export class FilterView implements OnInit {
     } else {
       this.addCriteria();
     }
+    this.isModalView = this.filterService.isModalView$.value;
   }
 
   get criteria(): FormArray {
@@ -79,8 +83,8 @@ export class FilterView implements OnInit {
     }
     this.filterService.saveFilter(this.filterForm.value).subscribe({
       next: () => {
-        if (this.filterService.isModalView$.value) {
-          this.filterService.isModalView$.next(false);
+        if (this.isModalView) {
+          this.ngbModal.dismissAll();
         } else {
           this.router.navigate(['/']);
         }
@@ -105,8 +109,8 @@ export class FilterView implements OnInit {
   }
 
   closeClicked(): void {
-    if (this.filterService.isModalView$.value) {
-      this.filterService.isModalView$.next(false);
+    if (this.isModalView) {
+      this.ngbModal.dismissAll();
     } else {
       this.router.navigate(['/']);
     }

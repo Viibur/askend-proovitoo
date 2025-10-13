@@ -8,6 +8,7 @@ import { FrontPage } from './front-page/front-page';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgSelectComponent } from '@ng-select/ng-select';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import { NgSelectComponent } from '@ng-select/ng-select';
     ReactiveFormsModule,
     FormsModule,
     NgSelectComponent,
+    NgbModule,
   ],
   providers: [
     provideBrowserGlobalErrorListeners(),
