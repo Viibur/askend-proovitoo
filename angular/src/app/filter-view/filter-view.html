@@ -1,97 +1,96 @@
-<div class="overflow-hidden">
-  <div class="row mb-4 header">
-    <div class="col p-0">
-      <h5 class="fw-bold p-2 ms-3 text-white">
-        Filter
-      </h5>
-    </div>
-    <div class="col d-flex justify-content-end align-items-center p-2">
-      <button class="btn btn-close btn-close-white" [routerLink]="'/'"></button>
-    </div>
-  </div>
-
-  <div class="p-3">
-    <div class="filter-header row">
-      <h5 class="w-auto fw-bold">Filter name</h5>
-      <input class="w-25"
-             type="text"
-             [style]="filter.name ? '' : 'border-color: red;'"
-             [placeholder]="'Filter name'"
-             [(ngModel)]="filter.name"/>
-    </div>
-
-    <!-- Criteria Rows -->
-    <div class="pt-3">
-      <div class="row overflow-y-scroll" style="max-height: 50vh;">
-        <h5 class="w-auto fw-bold">Criteria</h5>
-        <div class="col">
-          @for (filterCriteria of filter.criteria; track filterCriteria.addedOrder ? filterCriteria.addedOrder : filterCriteria.id) {
-            <div class="row pb-4">
-              <ng-select dropdownPosition="bottom"
-                         class="col-3"
-                         appendTo="body"
-                         (change)="changeCondition(filterCriteria)"
-                         [clearable]="false"
-                         [multiple]="false"
-                         [items]=" criteriaTypes"
-                         [searchable]="false"
-                         [(ngModel)]="filterCriteria.type"/>
-
-              <ng-select dropdownPosition="bottom"
-                         class="col-3"
-                         appendTo="body"
-                         [clearable]="false"
-                         [multiple]="false"
-                         [items]="conditions[filterCriteria.type]"
-                         [searchable]="false"
-                         [(ngModel)]="filterCriteria.condition"/>
-
-              <div class="col-3">
-                @if (filterCriteria.type === Type.AMOUNT) {
-                  <input class="w-100"
-                         type="number"
-                         [style]="filterCriteria.criteriaValue ? '' : 'border-color: red;'"
-                         [(ngModel)]="filterCriteria.criteriaValue">
-                } @else if (filterCriteria.type === Type.TITLE) {
-                  <input class="w-100"
-                         type="text"
-                         [style]="filterCriteria.criteriaValue ? '' : 'border-color: red;'"
-                         [(ngModel)]="filterCriteria.criteriaValue">
-                } @else {
-                  <input [(ngModel)]="filterCriteria.criteriaValue"
-                         [value]="filterCriteria.criteriaValue"
-                         [style]="filterCriteria.criteriaValue ? '' : 'border-color: red;'"
-                         class="w-100"
-                         type="date"/>
-                }
-              </div>
-            </div>
-          }
-        </div>
+<form [formGroup]="filterForm">
+  <div class="overflow-hidden">
+    <div class="row mb-4 header">
+      <div class="col p-0">
+        <h5 class="fw-bold p-2 ms-3 text-white">
+          Filter
+        </h5>
+      </div>
+      <div class="col d-flex justify-content-end align-items-center p-2">
+        <button class="btn btn-close btn-close-white" [routerLink]="'/'"></button>
       </div>
     </div>
-    <div class="row p-2 justify-content-center">
-      <button class="btn btn-add bg-dark text-white" (click)="addCriteria()">+ Add Row</button>
-    </div>
 
-    <div class="row">
-      <h5 class="w-auto fw-bold mt-1">Selection</h5>
-      @for (selection of [1, 2, 3]; track selection) {
-        <span class="w-auto d-flex align-items-center">
-          <input [(ngModel)]="filter.option"
+    <div class="p-3">
+      <div class="filter-header row">
+        <h5 class="w-auto fw-bold">Filter name</h5>
+        <input class="w-25"
+               type="text"
+               formControlName="name"
+               [placeholder]="'Filter name'"/>
+      </div>
+
+      <!-- Criteria Rows -->
+      <div class="pt-3">
+        <div class="row overflow-y-scroll" style="max-height: 50vh;">
+          <h5 class="w-auto fw-bold">Criteria</h5>
+          <div class="col" formArrayName="criteria">
+            @for (filterCriteria of criteriaGroups; track $index) {
+              <ng-container [formGroup]="filterCriteria">
+                <div class="row pb-4">
+                  <ng-select dropdownPosition="bottom"
+                             class="col-3"
+                             appendTo="body"
+                             formControlName="type"
+                             (change)="changeCondition($index)"
+                             [clearable]="false"
+                             [multiple]="false"
+                             [items]=" criteriaTypes"
+                             [searchable]="false"/>
+
+                  <ng-select dropdownPosition="bottom"
+                             class="col-3"
+                             appendTo="body"
+                             [clearable]="false"
+                             [multiple]="false"
+                             [items]="conditions[filterCriteria.controls['type']?.value]"
+                             [searchable]="false"
+                             formControlName="condition"/>
+                  <div class="col-3">
+                    @if (filterCriteria.controls['type']?.value == Type.AMOUNT) {
+                      <input class="w-100"
+                             type="number"
+                             formControlName="criteriaValue"/>
+                    } @else if (filterCriteria.controls['type']?.value == Type.TITLE) {
+                      <input class="w-100"
+                             type="text"
+                             formControlName="criteriaValue"/>
+                    } @else {
+                      <input class="w-100"
+                             type="date"
+                             formControlName="criteriaValue"/>
+                    }
+                  </div>
+                </div>
+              </ng-container>
+            }
+          </div>
+        </div>
+      </div>
+      <div class="row p-2 justify-content-center">
+        <button class="btn btn-add bg-dark text-white" (click)="addCriteria()">+ Add Row</button>
+      </div>
+
+      <div class="row">
+        <h5 class="w-auto fw-bold mt-1">Selection</h5>
+        @for (selection of [1, 2, 3]; track selection) {
+          <span class="w-auto d-flex align-items-center">
+          <input formControlName="option"
                  [value]='selection'
                  class="me-2"
                  type="radio">
           Select {{ selection }}
       </span>
-      }
-    </div>
+        }
+      </div>
 
+    </div>
+    <div class="footer d-flex justify-content-center">
+      <button class="btn btn-dark me-3 mt-2 mb-2" [routerLink]="'/'">Close</button>
+      <button class="btn btn-info ms-3 mt-2 mb-2"
+              (click)="onSubmit()"
+              [disabled]="filterForm.invalid">Save
+      </button>
+    </div>
   </div>
-  <div class="footer d-flex justify-content-center">
-    <button class="btn btn-dark me-3 mt-2 mb-2" [routerLink]="'/'">Close</button>
-    <button class="btn btn-info ms-3 mt-2 mb-2"
-            (click)="onSubmit()"
-            [disabled]="!isFilterValid()">Save</button>
-  </div>
-</div>
+</form>

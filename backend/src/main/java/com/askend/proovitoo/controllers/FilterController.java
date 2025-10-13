@@ -36,5 +36,4 @@ public class FilterController {
         filterService.addFilter(filterDTO);
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
 }

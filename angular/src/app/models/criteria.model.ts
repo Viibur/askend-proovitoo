@@ -1,7 +1,8 @@
+import { Type } from './criteria.enum';
+
 export interface CriteriaDTO {
   id: number | null;
-  type: string;
+  type: Type;
   condition: string;
   criteriaValue: string;
-  addedOrder: number;
 }

@@ -1,11 +1,11 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
-import {FilterService} from '../services/filter.service';
-import {FilterDTO} from '../models/filter.model';
-import {Router, RouterLink} from '@angular/router';
-import {AmountCondition, DateCondition, TitleCondition, Type} from '../models/criteria.enum';
-import {NgSelectComponent} from '@ng-select/ng-select';
-import {FormsModule} from '@angular/forms';
-import {CriteriaDTO} from '../models/criteria.model';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { FilterService } from '../services/filter.service';
+import { FilterDTO } from '../models/filter.model';
+import { Router, RouterLink } from '@angular/router';
+import { AmountCondition, DateCondition, TitleCondition, Type } from '../models/criteria.enum';
+import { NgSelectComponent } from '@ng-select/ng-select';
+import { FormArray, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { CriteriaDTO } from '../models/criteria.model';
 
 @Component({
   selector: 'app-filter-view',
@@ -16,43 +16,70 @@ import {CriteriaDTO} from '../models/criteria.model';
     NgSelectComponent,
     FormsModule,
     RouterLink,
+    ReactiveFormsModule,
   ],
 })
 export class FilterView implements OnInit {
   protected readonly Type = Type;
-  filter: FilterDTO = {
-    id: null,
-    name: '',
-    criteria: [],
-    option: 1,
-  };
-
+  filterForm: FormGroup;
   criteriaTypes: string[] = [Type.AMOUNT, Type.TITLE, Type.DATE];
-  conditions: {[key: string] : AmountCondition[] | TitleCondition[] | DateCondition[]} = {
+  conditions: { [key: string]: AmountCondition[] | TitleCondition[] | DateCondition[] } = {
     [Type.AMOUNT.valueOf()]: [AmountCondition.MORE, AmountCondition.LESS, AmountCondition.EQUALS],
     [Type.TITLE.valueOf()]: [TitleCondition.STARTS_WITH, TitleCondition.ENDS_WITH, TitleCondition.CONTAINS],
     [Type.DATE.valueOf()]: [DateCondition.FROM, DateCondition.TO, DateCondition.EQUALS],
-  }
+  };
 
   constructor(private readonly router: Router,
-              private readonly filterService: FilterService,
-              private readonly changeDetectorRef: ChangeDetectorRef) {
+      private readonly formBuilder: FormBuilder,
+      private readonly filterService: FilterService,
+      private readonly changeDetectorRef: ChangeDetectorRef) {
+    this.filterForm = this.formBuilder.group({
+      id: [null],
+      name: ['', Validators.required],
+      option: [1, Validators.required],
+      criteria: this.formBuilder.array([]),
+    });
   }
 
   ngOnInit(): void {
     if (this.filterService.filterId$.value) {
       this.filterService.getFilterById(this.filterService.filterId$.value).subscribe((filter: FilterDTO) => {
-        this.filter = filter;
-        this.changeDetectorRef.detectChanges()
+        const criteriaArray: FormArray = this.formBuilder.array([]);
+        filter.criteria.forEach((criteria: CriteriaDTO, i) => {
+          criteriaArray.push(this.formBuilder.group({
+            id: [criteria.id ?? null],
+            type: [criteria.type, Validators.required],
+            condition: [criteria.condition, Validators.required],
+            criteriaValue: [criteria.criteriaValue, Validators.required],
+          }));
+        });
+        this.filterForm.setControl('criteria', criteriaArray);
+        this.filterForm.patchValue({
+          id: filter.id,
+          name: filter.name,
+          option: filter.option,
+        });
+        this.changeDetectorRef.detectChanges();
       });
     } else {
       this.addCriteria();
     }
   }
 
+  get criteria(): FormArray {
+    return this.filterForm.get('criteria') as FormArray;
+  }
+
+  get criteriaGroups(): FormGroup[] {
+    return (this.filterForm.get('criteria') as FormArray).controls as FormGroup[];
+  }
+
   onSubmit(): void {
-    if (!this.isFilterValid()) return;
-    this.filterService.saveFilter(this.filter).subscribe({
+    if (this.filterForm.invalid) {
+      return;
+    }
+    console.log(this.filterForm.value)
+    this.filterService.saveFilter(this.filterForm.value).subscribe({
       next: () => {
         this.router.navigate(['/']);
       },
@@ -60,33 +87,18 @@ export class FilterView implements OnInit {
   }
 
   addCriteria(): void {
-    this.filter.criteria.push({
-      id: null,
-      type: Type.AMOUNT,
-      condition: AmountCondition.MORE,
+    this.criteria.push(this.formBuilder.group({
+      type: [Type.AMOUNT, Validators.required],
+      condition: [AmountCondition.MORE, Validators.required],
+      criteriaValue: ['', Validators.required],
+    }));
+  }
+
+  changeCondition(i: number): void {
+    const type: string = this.criteria.at(i).get('type')?.value;
+    this.criteria.at(i).patchValue({
+      condition: this.conditions[type][0],
       criteriaValue: '',
-      addedOrder: this.filter.criteria.length + 1,
     });
-  }
-
-  changeCondition(filterCriteria: CriteriaDTO): void {
-    filterCriteria.condition = this.conditions[filterCriteria.type][0];
-    filterCriteria.criteriaValue = ''
-  }
-
-  isFilterValid(): boolean {
-    if (this.filter.name && this.filter.option && this.areCriteriaValid()) {
-      return true;
-    }
-    return false;
-  }
-
-  areCriteriaValid(): boolean {
-    for (const criteria of this.filter.criteria) {
-      if (!criteria.criteriaValue) {
-        return false;
-      }
-    }
-    return true;
   }
 }

@@ -11,3 +11,7 @@ input {
   border-width: 1px;
   height: 36px;
 }
+
+input.ng-invalid {
+    border: 1px solid red;
+}

@@ -1,23 +1,23 @@
 export enum Type {
-  AMOUNT = 'Amount',
-  TITLE = 'Title',
-  DATE = 'Date',
+  AMOUNT = 'AMOUNT',
+  TITLE = 'TITLE',
+  DATE = 'DATE',
 }
 
 export enum AmountCondition {
-  MORE = 'More',
-  LESS = 'Less',
-  EQUALS = 'Equals',
+  MORE = 'MORE',
+  LESS = 'LESS',
+  EQUALS = 'EQUALS',
 }
 
 export enum TitleCondition {
-  STARTS_WITH = 'Starts with',
-  ENDS_WITH = 'Ends with',
-  CONTAINS = 'Contains',
+  STARTS_WITH = 'STARTS WITH',
+  ENDS_WITH = 'ENDS WITH',
+  CONTAINS = 'CONTAINS',
 }
 
 export enum DateCondition {
-  FROM = 'From',
-  TO = 'To',
-  EQUALS = 'Equals'
+  FROM = 'FROM',
+  TO = 'TO',
+  EQUALS = 'EQUALS'
 }
