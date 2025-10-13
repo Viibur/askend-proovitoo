@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {FilterDTO, FilterNameDTO} from '../models/filter.model';
 import {HttpClient} from '@angular/common/http';
@@ -25,6 +25,7 @@ export class FilterService {
 
   private readonly _filterIdNameList$: BehaviorSubject<FilterNameDTO[]> = new BehaviorSubject<FilterNameDTO[]>([]);
   private readonly _filterId$: BehaviorSubject<number | null> = new BehaviorSubject<number | null>(null);
+  private readonly _isModalView$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
   get filterIdNameList$(): BehaviorSubject<FilterNameDTO[]> {
     return this._filterIdNameList$;
@@ -34,4 +35,7 @@ export class FilterService {
     return this._filterId$;
   }
 
+  get isModalView$(): BehaviorSubject<boolean> {
+    return this._isModalView$;
+  }
 }

@@ -1,8 +1,12 @@
 <div class="overflow-x-hidden">
   <div class="header">
-    <h5 class="fw-bold p-3 ms-2 text-white">
+    <h4 class="fw-bold pt-3 ms-2 text-white">
       Filter list
-    </h5>
+    </h4>
+    <div class="fw-bold p-1 ms-2 end-0">
+      <input type="radio" [(ngModel)]="isModalView"/>
+      <span> Modal view</span>
+    </div>
   </div>
   <div class="overflow-y-scroll" style="max-height: 60vh">
     @for (filter of filters; track filter.id) {
@@ -16,8 +20,13 @@
   </div>
   <div class="row p-2 justify-content-center mt-5">
     <button class="col-2 btn btn-add btn-secondary text-white"
-            (click)="addFilterClicked()"
-            [routerLink]="'/filter/'">+ Add Filter
+            (click)="onFilterClick()">+ Add Filter
     </button>
   </div>
 </div>
+
+@if (isModalView) {
+  <dialog>
+    {{'tere'}}
+  </dialog>
+}

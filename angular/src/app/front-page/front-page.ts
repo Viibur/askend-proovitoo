@@ -11,6 +11,7 @@ import {Router} from '@angular/router';
 })
 export class FrontPage implements OnInit {
   filters: FilterNameDTO[] = [];
+  isModalView: boolean = false;
 
   constructor(private readonly router: Router,
               private readonly filterService: FilterService,
@@ -23,16 +24,18 @@ export class FrontPage implements OnInit {
       this.filterService.filterIdNameList$.next(filters);
       this.changeDetectorRef.detectChanges();
     });
-
+    this.filterService.isModalView$.subscribe(isModalView => this.isModalView = isModalView);
   }
 
-  onFilterClick(id: number): void {
-    this.filterService.filterId$.next(id);
-    this.router.navigate(['/filter']);
-  }
+  onFilterClick(id?: number | undefined): void {
+    if (id) {
+      this.filterService.filterId$.next(id);
+    }
+    if (this.isModalView) {
 
-  addFilterClicked(): void {
-    this.filterService.filterId$.next(null);
+    } else {
+      this.router.navigate(['/filter']);
+    }
   }
 
   onFilterKeyDown($event: KeyboardEvent, id: number): void {

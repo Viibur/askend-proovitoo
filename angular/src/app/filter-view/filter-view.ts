@@ -78,7 +78,6 @@ export class FilterView implements OnInit {
     if (this.filterForm.invalid) {
       return;
     }
-    console.log(this.filterForm.value)
     this.filterService.saveFilter(this.filterForm.value).subscribe({
       next: () => {
         this.router.navigate(['/']);
