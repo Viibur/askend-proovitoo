@@ -10,7 +10,7 @@ DROP TABLE IF EXISTS criteria;
 CREATE TABLE criteria
 (
     id             INT PRIMARY KEY AUTO_INCREMENT,
-    filter_id      INT          NOT NULL,
+    filter_id      INT,
     type           VARCHAR(255) NOT NULL,
     condition      VARCHAR(255) NOT NULL,
     criteria_value VARCHAR(255) NOT NULL,

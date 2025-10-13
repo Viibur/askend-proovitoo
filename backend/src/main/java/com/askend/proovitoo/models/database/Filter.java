@@ -1,13 +1,15 @@
 package com.askend.proovitoo.models.database;
 
-import jakarta.persistence.*;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-
 import java.util.List;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import lombok.Data;
 
 @Data
 @Entity
@@ -18,4 +20,7 @@ public class Filter {
     private Long id;
     private String name;
     private int option;
+
+    @OneToMany(mappedBy = "filter", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Criteria> criteria;
 }
