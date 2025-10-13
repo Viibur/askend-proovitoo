@@ -7,7 +7,7 @@
         </h5>
       </div>
       <div class="col d-flex justify-content-end align-items-center p-2">
-        <button class="btn btn-close btn-close-white" [routerLink]="'/'"></button>
+        <button class="btn btn-close btn-close-white" (click)="closeClicked()"></button>
       </div>
     </div>
 
@@ -86,7 +86,7 @@
 
     </div>
     <div class="footer d-flex justify-content-center">
-      <button class="btn btn-dark me-3 mt-2 mb-2" [routerLink]="'/'">Close</button>
+      <button class="btn btn-dark me-3 mt-2 mb-2" (click)="closeClicked()">Close</button>
       <button class="btn btn-info ms-3 mt-2 mb-2"
               (click)="onSubmit()"
               [disabled]="filterForm.invalid">Save

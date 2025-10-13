@@ -24,7 +24,13 @@ export class FrontPage implements OnInit {
       this.filterService.filterIdNameList$.next(filters);
       this.changeDetectorRef.detectChanges();
     });
-    this.filterService.isModalView$.subscribe(isModalView => this.isModalView = isModalView);
+    this.filterService.isModalView$.subscribe(isModalView => {
+      console.log(isModalView)
+      if (!this.isModalView) {
+        document.querySelector("dialog")?.close();
+      }
+      this.isModalView = isModalView;
+    });
   }
 
   onFilterClick(id?: number | undefined): void {
@@ -32,7 +38,7 @@ export class FrontPage implements OnInit {
       this.filterService.filterId$.next(id);
     }
     if (this.isModalView) {
-
+      document.querySelector("dialog")?.show()
     } else {
       this.router.navigate(['/filter']);
     }

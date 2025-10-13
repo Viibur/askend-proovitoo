@@ -1,11 +1,11 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { FilterService } from '../services/filter.service';
-import { FilterDTO } from '../models/filter.model';
-import { Router, RouterLink } from '@angular/router';
-import { AmountCondition, DateCondition, TitleCondition, Type } from '../models/criteria.enum';
-import { NgSelectComponent } from '@ng-select/ng-select';
-import { FormArray, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { CriteriaDTO } from '../models/criteria.model';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {FilterService} from '../services/filter.service';
+import {FilterDTO} from '../models/filter.model';
+import {Router} from '@angular/router';
+import {AmountCondition, DateCondition, TitleCondition, Type} from '../models/criteria.enum';
+import {NgSelectComponent} from '@ng-select/ng-select';
+import {FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
+import {CriteriaDTO} from '../models/criteria.model';
 
 @Component({
   selector: 'app-filter-view',
@@ -15,7 +15,6 @@ import { CriteriaDTO } from '../models/criteria.model';
   imports: [
     NgSelectComponent,
     FormsModule,
-    RouterLink,
     ReactiveFormsModule,
   ],
 })
@@ -30,9 +29,9 @@ export class FilterView implements OnInit {
   };
 
   constructor(private readonly router: Router,
-      private readonly formBuilder: FormBuilder,
-      private readonly filterService: FilterService,
-      private readonly changeDetectorRef: ChangeDetectorRef) {
+              private readonly formBuilder: FormBuilder,
+              private readonly filterService: FilterService,
+              private readonly changeDetectorRef: ChangeDetectorRef) {
     this.filterForm = this.formBuilder.group({
       id: [null],
       name: ['', Validators.required],
@@ -80,7 +79,11 @@ export class FilterView implements OnInit {
     }
     this.filterService.saveFilter(this.filterForm.value).subscribe({
       next: () => {
-        this.router.navigate(['/']);
+        if (this.filterService.isModalView$.value) {
+          this.filterService.isModalView$.next(false);
+        } else {
+          this.router.navigate(['/']);
+        }
       },
     });
   }
@@ -99,5 +102,13 @@ export class FilterView implements OnInit {
       condition: this.conditions[type][0],
       criteriaValue: '',
     });
+  }
+
+  closeClicked(): void {
+    if (this.filterService.isModalView$.value) {
+      this.filterService.isModalView$.next(false);
+    } else {
+      this.router.navigate(['/']);
+    }
   }
 }
